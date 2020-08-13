@@ -8,9 +8,21 @@
 
 import Foundation
 
+enum ChangelogError: Error {
+    case invalidCategory
+}
+
 struct Changelog {
 
-    func add(text: String) throws {
+    func add(category: String, text: String, changeRequest: String) throws {
+        guard let mappedCategory = ChangelogEntry.Category(rawValue: category) else {
+            throw ChangelogError.invalidCategory
+        }
+        let changelogEntry = ChangelogEntry(category: mappedCategory, text: text, changeRequest: changeRequest)
         
+    }
+
+    func generate() throws {
+
     }
 }
