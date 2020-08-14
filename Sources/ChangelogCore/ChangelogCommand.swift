@@ -69,8 +69,9 @@ public struct Generate: ParsableCommand {
         let currentDirectoryPath = FileManager.default.currentDirectoryPath
         let directoryForUpcomingChangelogEntries = URL(fileURLWithPath: currentDirectoryPath).appendingPathComponent("upcoming", isDirectory: true)
 
-        try Changelog().generate(from: directoryForUpcomingChangelogEntries, releaseName: releaseName)
+        let markdownText = try Changelog().generate(from: directoryForUpcomingChangelogEntries, releaseName: releaseName)
 
+        print(markdownText)
         print("Done - generated changelog based on all changelog entry json file")
     }
 }
