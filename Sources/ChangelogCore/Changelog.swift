@@ -14,12 +14,15 @@ enum ChangelogError: Error {
 
 struct Changelog {
 
-    func add(category: String, text: String, changeRequest: String) throws {
-        guard let mappedCategory = ChangelogEntry.Category(rawValue: category) else {
-            throw ChangelogError.invalidCategory
-        }
-        let changelogEntry = ChangelogEntry(category: mappedCategory, text: text, changeRequest: changeRequest)
-        
+    /// Add all content available from ChangelogEntry to a file with name `<changelogEntry.changeRequest>.json` in the given folder.
+    func add(changelogEntry: ChangelogEntry, to upcomingChangelogEntryDirectory: URL) throws {
+        let changelogEntryFile = upcomingChangelogEntryDirectory.appendingPathComponent("\(changelogEntry.changeRequest).json")
+
+        let jsonEncoder = JSONEncoder()
+        jsonEncoder.outputFormatting = .prettyPrinted
+        try jsonEncoder.encode(changelogEntry).write(to: changelogEntryFile)
+
+        print(changelogEntryFile.absoluteString)
     }
 
     func generate() throws {

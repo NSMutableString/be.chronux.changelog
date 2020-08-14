@@ -7,9 +7,10 @@
 
 import Foundation
 
-struct ChangelogEntry: Decodable {
+/// Used for conversion from and to our JSON file to construct a CHANGELOG.md file
+struct ChangelogEntry: Codable {
 
-    enum Category: String, Decodable, RawRepresentable {
+    enum Category: String, Codable, RawRepresentable {
         case added
         case fixed
         case updated

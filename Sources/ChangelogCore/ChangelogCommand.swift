@@ -39,7 +39,21 @@ public struct Add: ParsableCommand {
     public init() {}
 
     public func run() throws {
-        try Changelog().add(category: category, text: text, changeRequest: changeRequest)
+
+        // Validate input
+        guard let mappedCategory = ChangelogEntry.Category(rawValue: category) else {
+            throw ChangelogError.invalidCategory
+        }
+
+        // Bundle all information
+        let changelogEntry = ChangelogEntry(category: mappedCategory, text: text, changeRequest: changeRequest)
+
+        // Construct the path where we the file needs to be added
+        let currentDirectoryPath = FileManager.default.currentDirectoryPath
+        let directoryForChangelogEntryFile = URL(fileURLWithPath: currentDirectoryPath).appendingPathComponent("upcoming", isDirectory: true)
+        try FileManager.default.createDirectory(atPath: directoryForChangelogEntryFile.path, withIntermediateDirectories: true, attributes: nil)
+
+        try Changelog().add(changelogEntry: changelogEntry, to: directoryForChangelogEntryFile)
 
         print("Done - created changelog entry file")
     }
