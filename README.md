@@ -7,10 +7,15 @@ The approach taken here will create a separate file into a folder named `upcomin
 ### Quick run
 
 ```
-swift run -c release Changelog xxx
+swift run -c release Changelog --help
 ```
 
+### Demo
+
+![](./Images/terminalDemo.png)
+
 ### Where is my XCode project?
+
 - Run `swift package generate-xcodeproj` from project root.
 
 note: run `open Package.swift` to open the package without project
