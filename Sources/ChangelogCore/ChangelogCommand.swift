@@ -18,7 +18,7 @@ public struct ChangelogCommand: ParsableCommand {
         """,
         version: "1.0.0",
         shouldDisplay: true,
-        subcommands: [Add.self],
+        subcommands: [Add.self, Generate.self],
         defaultSubcommand: nil,
         helpNames: .long)
 
@@ -60,13 +60,16 @@ public struct Add: ParsableCommand {
 }
 
 public struct Generate: ParsableCommand {
-    @Argument(default: "UPCOMING", help: "the text for the changelog entry")
-    public var folder: String
+    @Argument(help: "the release name under which all upcoming change log entries will be bundled.")
+    public var releaseName: String
 
     public init() {}
 
     public func run() throws {
-        try Changelog().generate()
+        let currentDirectoryPath = FileManager.default.currentDirectoryPath
+        let directoryForUpcomingChangelogEntries = URL(fileURLWithPath: currentDirectoryPath).appendingPathComponent("upcoming", isDirectory: true)
+
+        try Changelog().generate(from: directoryForUpcomingChangelogEntries, releaseName: releaseName)
 
         print("Done - generated changelog based on all changelog entry json file")
     }

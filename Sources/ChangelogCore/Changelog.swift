@@ -25,7 +25,9 @@ struct Changelog {
         print(changelogEntryFile.absoluteString)
     }
 
-    func generate() throws {
-
+    func generate(from upcomingChangelogEntryDirectory: URL, releaseName: String) throws {
+        for file in try FileManager.default.contentsOfDirectory(atPath: upcomingChangelogEntryDirectory.path) {
+            print(file)
+        }
     }
 }
