@@ -17,7 +17,11 @@ struct ChangelogMarkdownGenerator {
     }
 
     mutating func writeReleaseName(_ name: String) {
-        buffer.append("# \(name)")
+        buffer.append("# \(name)\n")
+    }
+
+    mutating func writeCategoryName(_ category: String) {
+        buffer.append("## \(category)\n")
     }
 
     mutating func writeEmptyLine() {

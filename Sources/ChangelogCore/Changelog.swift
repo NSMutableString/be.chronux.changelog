@@ -29,15 +29,33 @@ struct Changelog {
         var generator = ChangelogMarkdownGenerator()
 
         generator.writeReleaseName(releaseName)
-        generator.writeEmptyLine()
 
+        for category in ChangelogEntry.Category.allCases {
+            generator.writeEmptyLine()
+            generator.writeCategoryName(category.rawValue)
+            let entries = try getChangelogEntries(for: category, from: upcomingChangelogEntryDirectory)
+            generateLines(for: category, entries: entries, generator: &generator)
+        }
+
+        return generator.buffer
+    }
+
+    private func getChangelogEntries(for category: ChangelogEntry.Category, from upcomingChangelogEntryDirectory: URL) throws -> [ChangelogEntry] {
+        var entries = [ChangelogEntry]()
         for file in try FileManager.default.contentsOfDirectory(atPath: upcomingChangelogEntryDirectory.path) {
             let fileUrl = upcomingChangelogEntryDirectory.appendingPathComponent(file)
             let data = try Data(contentsOf: fileUrl)
             let changelogEntry = try JSONDecoder().decode(ChangelogEntry.self, from: data)
-            generator.writeLine(changelogEntry: changelogEntry)
+            if changelogEntry.category == category {
+                entries.append(changelogEntry)
+            }
         }
+        return entries
+    }
 
-        return generator.buffer
+    private func generateLines(for category: ChangelogEntry.Category, entries: [ChangelogEntry], generator: inout ChangelogMarkdownGenerator) {
+        for entry in entries {
+            generator.writeLine(changelogEntry: entry)
+        }
     }
 }

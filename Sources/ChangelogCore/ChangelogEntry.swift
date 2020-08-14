@@ -11,7 +11,7 @@ import Foundation
 /// Used for conversion from and to our JSON file to construct a CHANGELOG.md file
 struct ChangelogEntry: Codable {
 
-    enum Category: String, Codable, RawRepresentable {
+    enum Category: String, Codable, RawRepresentable, CaseIterable {
         case added
         case fixed
         case updated
